@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>打地鼠游戏</title>
+    <link rel="stylesheet" href="min.css">
+</head>
+
+<body>
+    <!-- 标题栏以及结果的显示 -->
+    <h1>Whack-a-mole!
+        <span class="score">0</span>
+    </h1>
+    <!-- 开始游戏的按钮 -->
+    <button onClick="startGame()">Start!</button>
+    <!-- 游戏的盒子 -->
+    <div class="game">
+        <!-- 六个地鼠以及地洞 -->
+        <div class="hole hole1">
+            <div class="mole"></div>
+        </div>
+        <div class="hole hole2">
+            <div class="mole"></div>
+        </div>
+        <div class="hole hole3">
+            <div class="mole"></div>
+        </div>
+        <div class="hole hole4">
+            <div class="mole"></div>
+        </div>
+        <div class="hole hole5">
+            <div class="mole"></div>
+        </div>
+        <div class="hole hole6">
+            <div class="mole"></div>
+        </div>
+    </div>
+    <script>
+        // 获取相关的元素 例如地鼠，地洞 计分板分数等
+        const holes = document.querySelectorAll('.hole');
+        const scroeBoard = document.querySelector('.score');
+        const moles = document.querySelectorAll('.mole');
+        let lastHole;
+        // 用来停止游戏的进行
+        let timeUp = false;
+
+
+        // 获取在一定范围内的随机数
+        function randomTime(min,max) {
+            let randomTime = Math.round(Math.random() * (max - min) + min);
+            return randomTime;
+        }
+        
+        // 生成地洞
+        function randomHoles(holes) {
+            // floor为像下取整
+            let idx = Math.floor(Math.random() * holes.length);
+            // 存放的数组
+            let hole = holes[idx];
+
+            // console.log({idx,hole});
+            // 出现相同的地鼠时返回重新计算
+            if(lastHole === hole) {
+                console.log('the same hole!');
+                // 返回计算的函数 随机数字
+                return randomHoles(holes);
+            }
+            // 如果出现了两个连续相同的数字进行的处理
+            lastHole = hole;
+            return hole;
+        }
+        
+        // 地鼠钻出来功能
+        function peep() {
+
+            let hole = randomHoles(holes);
+            console.log(hole);
+            // 钻出来的时间
+            let time = randomTime(200,1000);
+            // 添加class Up属性
+            hole.classList.add('up');
+            // 结束时移除 class up属性
+            setTimeout(() =>{
+                hole.classList.remove('up');
+                if(!timeUp) peep();
+            },time);
+        }
+        // 开始游戏功能
+        function startGame() {
+            score = 0;
+            peep();
+            setTimeout(() => {timeUp = true},10000);
+            scroeBoard.textContent = score;
+        }
+        
+        // 计分板计数功能
+        function bonk(e) {
+            // 如果是使用代码进行的操作 e.isTrusted 则为false
+            if (!e.isTrusted) return;
+            // 选中了加上1
+            score++;
+            scroeBoard.textContent = score;
+            // 防止同一地鼠打两次
+            this.parentNode.classList.remove('up');
+        }
+        
+        moles.forEach(mole => mole.addEventListener('click',bonk));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="demo.css">
+  <title>古诗匹配</title>
+</head>
+<body>
+  <form class="search-form">
+    <input type="text" class="search" placeholder="诗人名字，关键字">
+    <ul class="suggestions">
+      <li>输入词句，找一首诗</li>
+      <li></li>   
+    </ul>
+  </form>
+
+  <script>
+    const endpoint ='https://gist.githubusercontent.com/liyuechun/f00bb31fb8f46ee0a283a4d182f691b4/raw/3ea4b427917048cdc596b38b67b5ed664605b76d/TangPoetry.json';
+    
+    const poetrys = [];// 储存数据
+
+    fetch(endpoint)
+      .then(responseData => {
+        console.log(responseData);
+        return responseData.json();
+    })
+    .then(data => {
+      console.log(data);
+      poetrys.push(...data);
+      console.log(poetrys);
+    });
+
+    function findMatches(wordToMatch, poetrys) {
+      return poetrys.filter(poet => {
+        // 正则找出匹配的诗句
+        const regex = new RegExp(wordToMatch, 'gi');
+        const author = poet.detail_author.join('');
+        //			console.log(author);
+        return poet.detail_text.match(regex) || poet.title.match(regex) || author.match(regex);
+      });
+    }
+    
+    // 展示新数据
+    function displayMatches() {
+      const matches = findMatches(this.value, poetrys);
+      const regex = new RegExp(this.value, 'gi');
+      const html = matches.map(poet => {
+        // 替换高亮的标签
+      const text = poet.detail_text.replace(regex, `<span class="hl">${ this.value }</span>`);
+      const title = poet.title.replace(regex, `<span class="hl">${ this.value }</span>`);
+      const detail_author = poet.detail_author[0].replace(regex, `<span class="hl">${ this.value }</span>`);
+        // 构造 HTML 值
+        return `
+      <li>
+        <span class="poet">${ text }</span>
+        <span class="title">${ title } - ${ detail_author }</span>
+      </li>
+    `;
+      }).join('');
+      //		console.log(html);
+      suggestions.innerHTML = html;
+    }
+
+    //例	console.log(poetrys);
+    
+    // [1,2,3,4].filter(num =>{
+    //   return num > 3;
+    //   })
+
+    //   返回值是4
+
+    const search = document.querySelector('.search');
+    const suggestions = document.querySelector('.suggestions');
+
+    search.addEventListener('change', displayMatches);
+    search.addEventListener('keyup', displayMatches);
+
+  </script>
+</body>
+</html>

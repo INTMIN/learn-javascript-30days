@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>一步步测试的效果</title>
+</head>
+<body>
+    <canvas id="draw" width="1200" height="800"  style="overflow:auto"></canvas>
+    <script>      
+        // 1.获取canvas节点
+        const canvas = document.querySelector('#draw');
+        // 判断浏览器支持
+        if (canvas.getContext){
+        //支持
+        var ctx = canvas.getContext('2d');
+        console.log("支持");
+        } else {
+        console.log('canvas-unsupported code here');
+        }
+        
+        // drawing code here
+        
+        // 设置宽高
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 打印宽高
+        console.log(`${canvas.width}  ${canvas.height}`);
+
+        // 笔触的形状颜色以及填充的颜色
+        ctx.lineWidth = 90;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "#f00";
+
+
+        let hue = 0;
+        // 颜色的初始值
+
+
+        let direction = true;
+        // 这里的作用是使用这个变量让后面的方向可以有个变量判断，即真和假的变换
+        
+        let x = 0;
+        let y = 0;
+
+        let isDowm = false;
+        // drawing code here
+
+        let lastX = 0;
+        let lastY = 0;
+
+    function draw(e) {
+
+        if (!isDown) return;
+
+        console.log(`${e.offsetX} ${e.offsetY}`);
+
+        x = e.offsetX;
+        y = e.offsetY;
+        
+        // 笔触的颜色变换效果
+        ctx.strokeStyle = `hsl(${ hue }, 90%, 50%)`;
+        if (hue >= 360) hue = 0;
+        hue++;
+
+        //控制笔触大小
+
+        
+        
+        if (ctx.lineWidth > 120 || ctx.lineWidth < 10) {
+        direction = !direction;
+        }
+          if (direction) {
+            ctx.lineWidth++;
+            } else {
+            ctx.lineWidth--;
+        }
+
+        ctx.beginPath();
+    // 移动到初始位置，  移动到当前位置， 复制
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        [lastX, lastY] = [x, y];
+
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+        isDown = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+    
+
+    // 鼠标移动时，调用draw方法 绘图的方法
+    canvas.addEventListener('mousemove', draw);
+    // 鼠标抬起时，将isDrawing置为false
+    canvas.addEventListener('mouseup', () => isDown = false);
+    // 当鼠标不在可绘图区域范围内时，将isDrawing置为false
+    canvas.addEventListener('mouseout', () => isDown = false);
+     </script>
+    <style>
+    html,
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+    canvas {
+        overflow: hidden;
+    }
+
+    </style>
+</body>
+</html>

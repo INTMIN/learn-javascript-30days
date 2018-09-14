@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>video text</title>
+</head>
+<body>
+    <div class="player">
+    <video class="player__video viewer" src="Shape of You.mp4"></video>
+    <div class="player__controls">
+        <div class="progress">
+          <div class="progress__filled"></div>
+        </div>
+        <button class="player__button toggle" title="toggle Play">►</button>
+        <input type="range" name="volume" class="player__slider" min="0" max="1" step="0.05" value="1">
+        <input type="range" name="playbackRate" class="player__slider" min="0.5" max="2" step="0.1" value="1">
+        <button data-skip="-10" class="player__button">« 10s</button>
+        <button data-skip="25" class="player__button">25s »</button>
+    </div>
+</div>  
+    <script>
+    
+    // 获取元素
+    const player = document.querySelector('.player');
+    const video = player.querySelector('.viewer');
+    const progress = player.querySelector('.progress');
+    const progressBar = player.querySelector('.progress__filled');
+    const toggle = player.querySelector('.toggle');
+    const skipButtons = player.querySelectorAll('[data-skip]');
+    const ranges = player.querySelectorAll('.player__slider');
+    
+
+    function videoplay(e) {
+        // if(video.paused){
+        //     video.play();
+        // }else{
+        //     video.pause();
+
+        const method = video.paused ? 'play' : 'pause';
+        video[method]();
+        }
+    function handleToggle(){
+        let icon = video.paused ? '►' : '❚ ❚'; 
+        toggle.textContent = icon;
+    }
+    function handlePlayerSlider(e){
+        video[e.target.name] = e.target.value;
+    }
+
+    function handleSkip(e){
+        let skiptime = parseFloat(this.dataset.skip);
+        video.currentTime += skiptime;
+    }
+
+    function handleprogressBar(e){
+        let pice = (e.offsetX / progress.offsetWidth) * video.duration;
+        // let pice = (e.offsetX / progress.clientWidth) * video.duration;
+        video.currentTime = pice;
+    }
+    function progressBarUpdate(){
+        let portion = parseFloat(video.currentTime / video.duration) * 100;
+        progressBar.style.flexBasis = `${portion}%`;
+    }
+    // 点击播放
+    video.addEventListener('click',videoplay);
+    // 点击或者播放时改变播放和暂停状态的图标
+    video.addEventListener('play',handleToggle);
+    video.addEventListener('pause',handleToggle);
+    video.addEventListener('timeupdate',progressBarUpdate);
+
+
+    toggle.addEventListener('click',videoplay);
+    toggle.addEventListener('click',handleToggle);
+
+    let mouseflag = false;
+    ranges.forEach(item => item.addEventListener('click',handlePlayerSlider));
+    ranges.forEach(item => item.addEventListener('mousedown',() => mouseflag = true));
+    ranges.forEach(item => item.addEventListener('mouseup',() => mouseflag = false));
+    ranges.forEach(item => item.addEventListener('mousemove',(e) => mouseflag && handlePlayerSlider(e)));
+
+    skipButtons.forEach(item => item.addEventListener('click',handleSkip));
+
+    // 防止鼠标在上面没有按下去也产生效果
+    let progressBarflag = false;
+    progress.addEventListener('click',handleprogressBar);
+    progress.addEventListener('mousemove',(e) => progressBarflag && handleprogressBar(e));
+    progress.addEventListener('mousedown',() => progressBarflag = true);
+    progress.addEventListener('mouseup',() => progressBarflag = false);
+
+    </script>
+</body>
+</html>

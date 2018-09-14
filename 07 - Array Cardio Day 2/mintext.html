@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数组的使用</title>
+</head>
+<body>
+    <div>请查看控制台数据</div>
+    <script>
+      const people = [
+    { name: 'Wes', year: 1988 },
+    { name: 'Kait', year: 1986 },
+    { name: 'Irv', year: 1970 },
+    { name: 'Lux', year: 2015 }
+];
+
+const comments = [
+    { text: 'Love this!', id: 523423 },
+    { text: 'Super good', id: 823423 },
+    { text: 'You are the best', id: 2039842 },
+    { text: 'Ramen is my fav food ever', id: 123523 },
+    { text: 'Nice Nice Nice!', id: 542328 }
+];
+
+
+    // 1. 是否至少有一人年满`19`周岁？
+    // some函数
+
+    // let isTrue = [2, 5, 8, 1, 4].some((element, index, array) => {
+    //  return element > 10;
+    // });
+
+    // console.log(isTrue);
+
+    // const isAdult = people.some(function(person){
+    //   const currentYear = new Date().getFullYear();
+    //   if(currentYear - person.year >= 19) {
+    //     return true;
+    //   }
+    // });
+    // console.log(isAdult);
+
+    // const isAdult = people.some(person => (new Date().getFullYear() - person.year) >= 19 );
+    // console.log(isAdult);
+
+
+    // 2.是否每一个人都年满`19`周岁？
+   //    例子所有都满足才输出为真
+   //    every函数
+   //     let isBigEnough = (element, index, array) => { 
+   //   return element >= 10; 
+   // } 
+
+    // [12, 5, 8, 130, 44].every(isBigEnough);   // false 
+   // [12, 54, 18, 130, 44].every(isBigEnough); // true
+
+    // const everyAdult = people.every(person => (new Date().getFullYear() - person.year) >= 19);
+    // console.log({everyAdult});
+
+    // 3.是否存在`id=823423`的评论？
+    // find函数
+    // let  isBigEnough = (element) => {
+    //   return element >= 15;
+    // }
+
+    // [12, 5, 8, 130, 44].find(isBigEnough); // 130
+    
+    // const findComment = comments.find(comment => comment.id === 823423);
+    // console.log(findComment);
+
+    // 4.找到`id=823423`的评论的序列号(下标)
+    // findIndex函数
+    // let isBigEnough = (element) => {
+    //   return element >= 15;
+    // }
+    // findIndex则返回的是索引
+
+    // [12, 5, 8, 130, 44].findIndex(isBigEnough);
+    // const findCommentIndex = comments.findIndex(comment => comment.id === 823423);
+    // console.log(findCommentIndex);
+
+    
+
+    // 5.`Array.prototype.splice()`
+    // 在索引2的位置移除0个元素，并且插入"drum"
+    // var myFish = ['angel', 'clown', 'mandarin', 'sturgeon'];
+    // var removed = myFish.splice(2, 0, 'drum');
+    // myFish 是 ["angel", "clown", "drum", "mandarin", "sturgeon"] 
+    // removed is [], 没有元素被移除。
+
+
+    // 从索引3开始移除1个元素。
+    // var myFish = ['angel', 'clown', 'drum', 'mandarin', 'sturgeon'];
+    // var removed = myFish.splice(3, 1);
+
+    // 移除的原色是 ["mandarin"]
+    // myFish 为 ["angel", "clown", "drum", "sturgeon"]
+
+
+    // 从索引2移除一个元素，并且插入"trumpet"
+    // var myFish = ['angel', 'clown', 'drum', 'sturgeon'];
+    // var removed = myFish.splice(2, 1, 'trumpet');
+    // myFish为 ["parrot", "anemone", "blue", "trumpet", "sturgeon"] 
+    // 移除的元素是 ["angel", "clown"]
+
+    // 从索引2开始移除所有元素
+    // var myFish = ['angel', 'clown', 'mandarin', 'sturgeon'];
+    // var removed = myFish.splice(2);
+    // myFish 为 ["angel", "clown"] 
+    // 移除的原色为 ["mandarin", "sturgeon"]
+
+    // array.splice(start)
+    // array.splice(start, deleteCount)
+    // array.splice(start, deleteCount, item1, item2, ...)
+    //**array.splice(start)：** 从索引`start`开始移除后面所有的元素。
+
+    // **array.splice(start, deleteCount)：** 从索引`start`元素删除`deleteCount`个元素。
+
+
+    // **array.splice(start, deleteCount, item1, item2, ...)：**从`start`索引开始，删除`deleteCount`个元素，然后插入`item1`,`item2`,...
+
+    // `arr.slice(begin, end)`：创建一个新数组，将索引`begin`-`end`(不包含end)的元素放到新数组中并返回新数组，原数组不被修改。
+    
+
+    // 6. 删除`id=823423`的评论    
+    const findCommentIndex = comments.findIndex(comment => comment.id === 823423);
+
+    // delete the comment with the ID of 823423
+    //comments.splice(findCommentIndex,1);
+
+    const newComments = [
+     ...comments.slice(0,findCommentIndex),
+     ...comments.slice(findCommentIndex+1)
+    ]; 
+    </script>
+</body>
+</html>

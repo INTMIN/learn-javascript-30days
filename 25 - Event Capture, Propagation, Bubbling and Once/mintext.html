@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>事件捕捉 事件冒泡 Dom</title>
+</head>
+
+<body>
+
+    <body class="bod">
+
+        <div class="one">
+            <div class="two">
+                <div class="three">
+                </div>
+            </div>
+        </div>
+        <style>
+            html {
+                box-sizing: border-box;
+            }
+
+            *,
+            *:before,
+            *:after {
+                box-sizing: inherit;
+            }
+
+            div {
+                width: 100%;
+                padding: 100px;
+            }
+
+            .one {
+                background: thistle;
+            }
+
+            .two {
+                background: mistyrose;
+            }
+
+            .three {
+                background: coral;
+            }
+        </style>
+        <script>
+            let divs = document.querySelectorAll("div");
+
+            divs.forEach(div => {
+                div.addEventListener('click',logText,{
+                    // 是否事件捕获`capture`以及单次执行`once`事件，它们两个的默认值都是`false
+                    capture:false
+                });
+            });
+            
+            function logText(e) {
+                // 打印class属性
+                console.log(this.classList.value);
+                // `e.stopPropagation();`是否停止冒泡，如果调用了这个方法，就不会触发父组建的方法。
+                e.stopPropagation();
+            }
+            
+            
+        </script>
+    </body>
+
+</html>

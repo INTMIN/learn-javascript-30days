@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>声音的输入转化文字</title>
+</head>
+
+<body>
+    <div class="words" contenteditable>
+    </div>
+    <script>
+        // 根据浏览器之间的兼容性，需要同时添加浏览器前缀
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        // 实例化SpeechRecognition对象
+        const recognition = new SpeechRecognition();
+        // interimResults 属性的默认值是 false ，代表语音识别器的返回值不会改变。在这个演示中，我们把它设置为 true ，这样随着我们的输入，识别结果有可能会改变。仔细观看演示，灰色的文字是临时性的，有时会改变，而黑色文本是最终结果，不会改变。
+        recognition.interimResults = true;
+        // 创建p便签，附加到DOM树中
+        let p = document.createElement('p');
+        const words = document.querySelector('.words');
+        words.appendChild(p);
+
+        // 监听recognition的result事件，获取到语音输入的文字
+        recognition.addEventListener('result', (e) => {
+            let results = Array.from(e.results) // e.results中保存的是识别的结果，本来并不是数组，需要将其转换为数组，方便使用其map、join等方法。
+               results = results.map(result => result[0])
+               results = results.map(result => result.transcript) // 获取到每一段话，是一个数组类型
+               results = results.join(''); // 将每一段话连接成字符串
+
+            // 可以动态的将其中的某一个词语换掉
+            const poopScript = results.replace(/good/gi, '👍');
+            p.textContent = poopScript;
+
+            // 如果当前一段输入结束了，也就是有停顿，就会新建一个p便签
+            if (e.results[0].isFinal) {
+                p = document.createElement('p');
+                words.appendChild(p);
+            }
+        });
+
+        // 监听recognition的end事件，当前输入结束后，再次开始，使其一直处于输入状态
+        recognition.addEventListener('end', recognition.start);
+
+        // 开启recognition
+        recognition.start();
+    </script>
+    <style>
+        html {
+            font-size: 10px;
+        }
+
+        body {
+            background: #ffc600;
+            font-family: 'helvetica neue';
+            font-weight: 200;
+            font-size: 20px;
+        }
+
+        .words {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem 1rem 5rem;
+            background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
+            background-size: 100% 3rem;
+            position: relative;
+            line-height: 3rem;
+        }
+
+        p {
+            margin: 0 0 3rem;
+        }
+
+        .words:before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            top: 0;
+            left: 30px;
+            bottom: 0;
+            border: 1px solid;
+            border-color: transparent #efe4e4;
+        }
+    </style>
+
+</body>
+
+</html>

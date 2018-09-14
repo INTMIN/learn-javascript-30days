@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>播放速度控制</title>
+    <link rel="stylesheet" href="min.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <video class="flex" width="765" height="430" src="./001项目效果演示以及知识点分析.mp4" loop controls></video>
+        <div class="speed">
+            <div class="speed-bar">1×</div>
+        </div>
+    </div>
+
+    <script>
+        // 获取相关的元素
+        const speed = document.querySelector('.speed');
+        const bar = speed.querySelector('.speed-bar');
+        const video = document.querySelector('.flex');
+        
+        function handleMove(e) {
+            // console.log(e);
+
+            // 获取鼠标在组件上的高度
+            let y = e.offsetY;
+            // 计算需要显示的高度   
+            let speedHeight = this.offsetHeight;
+            console.log({y,speedHeight});
+
+            // 组件的最小值的最大值
+            let min = 0.4;
+            let max = 4;
+            
+            // 鼠标在组件上的高度所占的百分比
+            let per = y / speedHeight;
+
+            // 计算height的值
+            let height = Math.round(per * 100) + '%';
+            
+            // 计算组件上的数字应该为多少
+            let playbackRate = per * (max - min) + min;
+
+            // 将bar的class属性height改成现在这的height
+            bar.style.height = height;
+            
+            // 将组件上的数字显示出来
+            // tofixed后面是几就保留几位小数
+            bar.textContent = playbackRate.toFixed(2) + 'x';
+
+            video.playbackRate = playbackRate;
+
+        }
+        // 鼠标在spped上移动时调用handleMove方法
+        speed.addEventListener('mousemove',handleMove);
+    </script>
+</body>
+
+</html>

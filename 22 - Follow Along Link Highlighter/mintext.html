@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>跟随鼠标移动透明标识</title>
+    <link rel="stylesheet" href="min.css">
+</head>
+
+<body>
+    <nav>
+        <ul class="menu">
+            <li>
+                <a href="">Home</a>
+            </li>
+            <li>
+                <a href="">Order Status</a>
+            </li>
+            <li>
+                <a href="">Tweets</a>
+            </li>
+            <li>
+                <a href="">Read Our History</a>
+            </li>
+            <li>
+                <a href="">Contact Us</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="wrapper">
+        <p>Lorem ipsum dolor sit amet,
+            <a href="">consectetur</a> adipisicing elit. Est
+            <a href="">explicabo</a> unde natus necessitatibus esse obcaecati distinctio, aut itaque, qui vitae!</p>
+        <p>Aspernatur sapiente quae sint
+            <a href="">soluta</a> modi, atque praesentium laborum pariatur earum
+            <a href="">quaerat</a> cupiditate consequuntur facilis ullam dignissimos, aperiam quam veniam.</p>
+        <p>Cum ipsam quod, incidunt sit ex
+            <a href="">tempore</a> placeat maxime
+            <a href="">corrupti</a> possimus
+            <a href="">veritatis</a> ipsum fugit recusandae est doloremque? Hic,
+            <a href="">quibusdam</a>, nulla.</p>
+        <p>Esse quibusdam, ad, ducimus cupiditate
+            <a href="">nulla</a>, quae magni odit
+            <a href="">totam</a> ut consequatur eveniet sunt quam provident sapiente dicta neque quod.</p>
+        <p>Aliquam
+            <a href="">dicta</a> sequi culpa fugiat
+            <a href="">consequuntur</a> pariatur optio ad minima, maxime
+            <a href="">odio</a>, distinctio magni impedit tempore enim repellendus
+            <a href="">repudiandae</a> quas!</p>
+    </div>
+    <script>
+        // 获取所有的a标签
+        const triggers = document.querySelectorAll('a');
+        // 创建一个span元素节点
+        const highlight = document.createElement('span');
+        // 添加高亮的highlight class属性
+        highlight.classList.add('highlight');
+        // 添加一个子节点
+        document.body.appendChild(highlight);
+
+        function highlightLink() {
+            const linkCoords = this.getBoundingClientRect();
+            console.log(linkCoords);
+            const coords = {
+                width: linkCoords.width,
+                height: linkCoords.height,
+                // 整个页面的高度需要考虑
+                top: linkCoords.top + window.scrollY,
+                left: linkCoords.left + window.scrollX
+            };
+
+            highlight.style.width = `${coords.width}px`;
+            highlight.style.height = `${coords.height}px`;
+            // 坐标coords.left  coords.top
+            highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
+        }
+        // forEach()为遍历
+        triggers.forEach(a => a.addEventListener('mouseenter', highlightLink));
+    </script>
+</body>
+
+</html>

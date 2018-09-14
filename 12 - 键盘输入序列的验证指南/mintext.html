@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符串匹配</title>
+    <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+    <div style="font-size:20px;color:green">请输入:min</div>
+
+    <div style="font-size:40px;color:red" class="input_word_pre"></div>
+    <div style="font-size:40px;color:blue" class="input_word_af"></div>
+
+    <script>
+        const pressed = [];
+        const secretCode = 'min';
+        const input_word_pre = document.querySelector('.input_word_pre');
+        const input_word_af = document.querySelector('.input_word_af');
+
+        window.addEventListener('keyup',(e) => {
+            // 判断是否是在A到z之间的字符串
+            const regex = new RegExp('[A-z]', 'gi');
+            // 判断长度是否符合要匹配的字符串长度
+            if (e.key.length === 1 && e.key.match(regex)){
+                // 把输入的字符串加入数组
+                pressed.push(e.key);
+                input_word_pre.innerText = pressed.join('');
+                // 判断数组总长度
+                pressed.splice(0, pressed.length - secretCode.length);
+                input_word_af.innerText = pressed.join('');
+                // 如果符合条件则运行显示的代码
+                if (pressed.join('').includes(secretCode)) {
+                    console.log('DING DING!');
+                    cornify_add();
+                }
+            }
+        }); 
+    </script>
+</body>
+</html>

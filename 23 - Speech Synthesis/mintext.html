@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文字转化语言输出</title>
+    <link rel="stylesheet" href="min.css">
+</head>
+<body>
+    <div class="voiceinator">
+
+        <h1>The Voiceinator</h1>
+        <!-- 语言选择框 -->
+        <select name="voice" id="voices">
+            <option value="">Select A Voice</option>
+        </select>
+
+        <!-- 语速进度条 -->
+        <label for="rate">Rate:</label>
+        <input type="range" name="rate" min="0" max="3" value="1" step="0.1">
+
+        <!-- 语言调节进度条 -->
+        <label for="pitch">Pitch:</label>
+        <input name="pitch" type="range" min="0" max="2" step="0.1">
+
+        <!-- 输入框 -->
+        <textarea name="text"> hello world</textarea>
+        <button id="stop">Stop</button>
+        <button id="speak">Speak</button>
+        
+    </div>
+
+    <script>
+        // 使用SpeechSynthesisUtterance实例化语言对象，然后获得页面上的各个DOM元素
+        const msg = new SpeechSynthesisUtterance();
+        // 语音合成Speech Synthesis API
+        const synth = window.speechSynthesis;
+        let voices = [];
+        const voicesDropdown = document.querySelector('[name="voice"]');
+        // 获取type为rang和text的对象
+        const options = document.querySelectorAll('[type="range"],[name="text"]');
+        // 选择ID为speak和stop的对象
+        const speakButton = document.querySelector('#speak');
+        const stopButton = document.querySelector('#stop');
+        // 获取文本内容
+        msg.text = document.querySelector('[name="text"]').value;
+
+        // 设置各种语言的下拉选择框
+        function populateVoices() {
+            voices = this.getVoices();
+            // 获取当前设备所有支持的对象
+            voicesDropdown.innerHTML = voices
+            // .filter(voice => voice.lang.includes('en'))
+            .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+            .join('');
+        }
+
+        // 设置当前语音的语言功能
+        function setVoice() {
+            msg.voice = voices.find(voice => voice.name === this.value);
+            toggle();
+        }
+
+        // 切换语言的播放和暂停功能
+        function toggle(startOver = true) {
+            synth.cancel();
+            if (startOver) {
+                synth.speak(msg);
+            }
+        }
+
+        // 设置语言的语速和语调功能
+        function setOption() {
+            console.log(this.name, this.value);
+            msg[this.name] = this.value;
+            toggle();
+        }
+        
+        // 监听语言对象的语言改变的事件
+        synth.addEventListener('voiceschanged',populateVoices);
+        // 当切换语言选择下拉菜单是被调用
+        voicesDropdown.addEventListener('change',setVoice);
+        // 为语速和语调设置改变的事件监听
+        options.forEach(option => option.addEventListener('change', setOption));
+        // 分别监听播放和暂停事件
+        speakButton.addEventListener('click',toggle);
+        stopButton.addEventListener('click', () => toggle(false));
+    </script>
+</body>
+</html>
