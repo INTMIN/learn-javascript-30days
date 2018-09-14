@@ -1,6 +1,6 @@
 # JavaScript 30天每日效果图
-
-在Github上看到了[wesbos](https://twitter.com/wesbos)的一个Javascript30天挑战的[repo](https://github.com/wesbos/JavaScript30)，旨在使用纯JS来进行练习，不允许使用任何其他的库和框架，该挑战共30天，我会在这里复现这30天遇到的挑战与问题，将其教程化、视频化分享给大家。
+这是我在CSDN上看到的一个开源项目
+在Github上[wesbos](https://twitter.com/wesbos)的一个Javascript30天挑战的[repo](https://github.com/wesbos/JavaScript30)，旨在使用纯JS来进行练习，不允许使用任何其他的库和框架，该挑战共30天，我会在这里复现这30天遇到的挑战与问题，将其分享给大家。
 
 
 [在线查看JS30所有项目效果图](http://30daysofjs.michaeleinsohn.com/)
