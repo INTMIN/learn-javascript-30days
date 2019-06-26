@@ -170,8 +170,4 @@ console.log(`dev3:${dev3}`);
 [Github Source Code](https://github.com/liyuechun/JavaScript30-liyuechun)
 
 
-|全栈部落|区块链部落|
-|:---------:|:------:|
-|![](http://orhm8wuhd.bkt.clouddn.com/quanzhanbuluo100.jpeg)|![](http://orhm8wuhd.bkt.clouddn.com/qukuailian100.jpg)|
-
 
